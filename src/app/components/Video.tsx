@@ -24,15 +24,27 @@ function Video({ height, width }: Props) {
   let constraints = { video: true }
   let _poseNet: null | any = null;
   let pose: null | any = null;
+  function poseNetLoaded() {
+    if (video.current) {
+      const videoStyles = video.current.getBoundingClientRect()
+      canvas.current?.setAttribute('height', `${videoStyles.height}`)
+      canvas.current?.setAttribute('width', `${videoStyles.width}`)
+    }
+  }
   function handlePose(poses: [object, object]) {
-    console.log(poses)
-    if (poses.length && video) {
+    if (poses.length) {
       pose = poses[0].pose;
     }
   }
   function drawToCanvas() {
     if (video && video.current) {
       context?.drawImage(video.current, 0, 0, width, height)
+      if (context && context.fillStyle && canvas.current && pose) {
+        context.strokeRect(pose.nose.x - 32, pose.nose.y - 32, 64, 64)
+        context.fillStyle = 'red'
+        context.strokeStyle = 'red'
+        context.stroke()
+      }
       requestAnimationFrame(drawToCanvas)
     }
   }
@@ -41,12 +53,12 @@ function Video({ height, width }: Props) {
       if (video.current && "srcObject" in video.current) {
         video.current.srcObject = mediaStream
       }
-      _poseNet = poseNet(video.current);
+      _poseNet = poseNet(video.current, poseNetLoaded);
       if (_poseNet) {
         _poseNet.on('pose', handlePose);
       }
       context = canvas.current?.getContext('2d');
-      context?.scale(1,1);
+      context?.scale(1, 1);
       drawToCanvas()
     }
   }
@@ -58,8 +70,8 @@ function Video({ height, width }: Props) {
   }
   return (
     <div>
-      <video ref={video} autoPlay></video>
-      <canvas ref={canvas} height={height}width={width}></canvas>
+      <video ref={video} height={height} width={width} autoPlay></video>
+      <canvas ref={canvas} ></canvas>
     </div>
   )
 }
