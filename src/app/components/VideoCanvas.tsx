@@ -35,7 +35,11 @@ function VideoCanvas({ height, width }: Props) {
     if (video && video.current && canvas && canvas.current) {
       context?.drawImage(video.current, 0, 0, canvas.current.width, canvas.current.height);
       if (pose && context) {
-        context.strokeRect(pose.nose.x - 32, pose.nose.y - 32, 64, 64);
+        for (let i = 0; i < pose.keypoints.length; i++) {
+          let x = pose.keypoints[i].position.x
+          let y = pose.keypoints[i].position.y
+          context.strokeRect(x - 32, y - 32, 64, 64);
+        }
         context.fillStyle = 'red';
         context.strokeStyle = 'red';
         context.stroke();
