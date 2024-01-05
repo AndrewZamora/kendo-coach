@@ -12,11 +12,12 @@ const { poseNet }: { poseNet: PoseNet } = ml5;
 type Props = {
   height: number,
   width: number,
+  mirror?: boolean,
 }
 
 let navigatorIsReady = false;
 
-function VideoCanvas({ height, width }: Props) {
+function VideoCanvas({ height, width, mirror }: Props) {
   let canvas = useRef<HTMLCanvasElement>(null)
   let video = useRef<HTMLVideoElement>(null);
   let context: null | CanvasRenderingContext2D | undefined = null;
@@ -71,6 +72,10 @@ function VideoCanvas({ height, width }: Props) {
         video.current.srcObject = mediaStream;
       }
       context = canvas.current?.getContext('2d');
+      if (mirror) {
+        context?.translate(width, 0)
+        context?.scale(-1, 1)
+      }
     }
     if (video && video.current) {
       video.current.addEventListener('play', updateCanvas);

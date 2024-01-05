@@ -4,7 +4,7 @@ const VideoCanvas = dynamic(()=> import('@/app/components/VideoCanvas'), {ssr: f
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <VideoCanvas height={540} width={720}  />
+      <VideoCanvas height={540} width={720} mirror={true}  />
     </main>
   )
 }
