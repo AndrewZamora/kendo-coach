@@ -23,25 +23,36 @@ function VideoCanvas({ height, width }: Props) {
   let constraints = { video: true }
   let _poseNet: null | any = null;
   let pose: null | any = null;
+  let skeleton: null | any = null;
+
   function poseNetLoaded() {
     console.log("loaded")
   }
   function handlePose(poses: [object, object]) {
     if (poses.length) {
       pose = poses[0].pose;
+      skeleton = poses[0].skeleton;
     }
   }
   function updateCanvas() {
     if (video && video.current && canvas && canvas.current) {
       context?.drawImage(video.current, 0, 0, canvas.current.width, canvas.current.height);
       if (pose && context) {
+        context.fillStyle = 'red';
+        context.strokeStyle = 'red';
         for (let i = 0; i < pose.keypoints.length; i++) {
           let x = pose.keypoints[i].position.x
           let y = pose.keypoints[i].position.y
           context.strokeRect(x - 32, y - 32, 64, 64);
         }
-        context.fillStyle = 'red';
-        context.strokeStyle = 'red';
+        context.stroke();
+        context.beginPath();
+        for (let i = 0; i < skeleton.length; i++) {
+          let a = skeleton[i][0];
+          let b = skeleton[i][1];
+          context.moveTo(a.position.x, a.position.y);
+          context.lineTo(b.position.x, b.position.y);
+        }
         context.stroke();
       }
     }
