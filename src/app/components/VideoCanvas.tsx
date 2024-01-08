@@ -25,6 +25,7 @@ function VideoCanvas({ height, width, mirror }: Props) {
   let _poseNet: null | any = null;
   let pose: null | any = null;
   let skeleton: null | any = null;
+  let animationId: null | number = null;
 
   function poseNetLoaded() {
     console.log("loaded")
@@ -57,15 +58,17 @@ function VideoCanvas({ height, width, mirror }: Props) {
         context.stroke();
       }
     }
-    requestAnimationFrame(updateCanvas);
+    animationId = requestAnimationFrame(updateCanvas);
   }
+
   useEffect(() => {
     return () => {
-      if (video && video.current) {
-        video.current.removeEventListener('play', updateCanvas);
+      if (animationId) {
+        cancelAnimationFrame(animationId)
       }
     }
-  }, [])
+  }, []);
+
   function handleMediaStream(mediaStream: MediaStream) {
     if (video && video.current) {
       if (video.current && "srcObject" in video.current) {
