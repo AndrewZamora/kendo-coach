@@ -1,4 +1,4 @@
-type coordinates = [number, number];
+type coordinates = number[];
 
 function calculateMidAngle(first: coordinates, mid: coordinates, end: coordinates) {
   const [x1, y1] = first;

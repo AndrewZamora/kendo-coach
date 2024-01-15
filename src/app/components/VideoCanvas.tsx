@@ -1,6 +1,7 @@
 'use client'
 import React, { useRef } from 'react';
 import Canvas from './Canvas';
+import calculateMidAngle from '../utilities/utilities';
 // https://github.com/ml5js/ml5-library/issues/570
 const ml5 = require('ml5');
 type PoseNet = (arg0: HTMLVideoElement, arg1?: () => void) => Promise<any>;
@@ -58,13 +59,18 @@ function VideoCanvas({ height, width, mirror }: Props) {
     }
   }
 
+  function getElbowAngle(pose) {
+    const { rightWrist, rightElbow, rightShoulder } = pose
+    return calculateMidAngle([rightShoulder.x, rightShoulder.y], [rightElbow.x, rightElbow.y], [rightWrist.x, rightWrist.y]);
+  }
+
   const draw = (context: CanvasRenderingContext2D) => {
     if (video.current && context) {
-        if (!mirrored) {
-          context.translate(width, 0)
-          context.scale(-1, 1)
-          mirrored = true;
-        }
+      if (!mirrored) {
+        context.translate(width, 0);
+        context.scale(-1, 1);
+        mirrored = true;
+      }
       context.drawImage(video.current, 0, 0, width, height);
       if (pose.current && skeleton.current) {
         context.fillStyle = 'red';
@@ -73,8 +79,12 @@ function VideoCanvas({ height, width, mirror }: Props) {
           let x = pose.current.keypoints[i].position.x
           let y = pose.current.keypoints[i].position.y
           context.strokeRect(x - 32, y - 32, 64, 64);
+          if (pose.current.keypoints[i].part === 'rightElbow') {
+            const elbowAngle = 180 - getElbowAngle(pose.current)
+            console.log(elbowAngle)
+          }
         }
-        context.stroke();
+        // context.stroke();
         context.beginPath();
         for (let i = 0; i < skeleton.current.length; i++) {
           let a = skeleton.current[i][0];
