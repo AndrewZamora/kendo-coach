@@ -96,11 +96,11 @@ function VideoCanvas({ height, width, mirror }: Props) {
     poseAngles.armpit = armpit;
     // console.table({ armpit, elbow })
     if (status.current !== 'up'&&poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
-      status.current = 'up'
+      status.current = 'up';
     }
-    if (status.current && status.current ==='up' && poseAngles.armpit.right < 70 && poseAngles.armpit.left > 70) {
-      status.current = 'down'
-      setCount((count) => count + 1)
+    if (status.current && status.current ==='up' && poseAngles.armpit.right < 70 && poseAngles.armpit.left < 70) {
+      status.current = 'down';
+      setCount((count) => count + 1);
     }
   }
 
