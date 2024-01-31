@@ -1,8 +1,8 @@
 'use client'
 import React, { useRef, useState } from 'react';
-import Canvas from './Canvas';
 import calculateMidAngle from '../utilities/utilities';
 import Counter from './Counter';
+import useCanvas from './useCanvas';
 // https://github.com/ml5js/ml5-library/issues/570
 const ml5 = require('ml5');
 type PoseNet = (arg0: HTMLVideoElement, arg1?: () => void) => Promise<any>;
@@ -42,9 +42,11 @@ let poseAngles = {
     left: 0
   }
 };
+
 function VideoCanvas({ height, width, mirror }: Props) {
   const [count, setCount] = useState(0);
   let video = useRef<HTMLVideoElement>(null);
+  const canvas = useCanvas({ draw })
   let constraints = { video: true }
   let _poseNet: null | any = null;
   let pose = useRef<null | any>(null);
@@ -95,16 +97,16 @@ function VideoCanvas({ height, width, mirror }: Props) {
     poseAngles.elbow = elbow;
     poseAngles.armpit = armpit;
     // console.table({ armpit, elbow })
-    if (status.current !== 'up'&&poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
+    if (status.current !== 'up' && poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
       status.current = 'up';
     }
-    if (status.current && status.current ==='up' && poseAngles.armpit.right < 70 && poseAngles.armpit.left < 70) {
+    if (status.current && status.current === 'up' && poseAngles.armpit.right < 70 && poseAngles.armpit.left < 70) {
       status.current = 'down';
       setCount((count) => count + 1);
     }
   }
 
-  const draw = (context: CanvasRenderingContext2D) => {
+  function draw(context: CanvasRenderingContext2D) {
     if (video.current && context) {
       if (!mirrored) {
         context.translate(width, 0);
@@ -133,10 +135,20 @@ function VideoCanvas({ height, width, mirror }: Props) {
     }
   }
 
+  function setMirror() {
+    const context = canvas.current?.getContext('2d')
+    if (context) {
+      context.translate(width, 0);
+      context.scale(-1, 1);
+      mirrored = true;
+    }
+  }
+
   return (
     <div>
       <video ref={video} height={height} width={width} autoPlay></video>
-      <Canvas height={height} width={width} draw={draw} mirror={mirror} />
+      <canvas ref={canvas} height={height} width={width}></canvas>
+      <button onClick={setMirror}>mirror</button>
       <Counter count={count} />
     </div>
 

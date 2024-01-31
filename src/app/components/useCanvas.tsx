@@ -1,16 +1,13 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
+import { ElementRef, useEffect, useRef } from 'react'
 
 type Props = {
-  height: number,
-  width: number,
-  draw: (context: CanvasRenderingContext2D) => void,
-  mirror?: boolean,
+  draw: (context:CanvasRenderingContext2D) => void,
 }
-function Canvas(props: Props) {
-  let ref = useRef<HTMLCanvasElement>(null)
 
-  const { draw, mirror, width, ...rest } = props;
+function useCanvas(props: Props) {
+  let ref = useRef<ElementRef<'canvas'>>(null)
+  const { draw } = props;
 
 
   useEffect(() => {
@@ -33,9 +30,7 @@ function Canvas(props: Props) {
     }
   }, [draw]);
 
-  return (
-    <canvas ref={ref} width={width} {...rest}></canvas>
-  )
+  return ref
 }
 
-export default Canvas
+export default useCanvas
