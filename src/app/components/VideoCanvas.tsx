@@ -53,7 +53,7 @@ function VideoCanvas({ height, width, mirror }: Props) {
   let status = useRef<null | string>(null);
   let skeleton = useRef<null | any>(null);
   let mediaStream: MediaStream | null = null;
-
+  let skeletonColor = '#16FF00'
   function poseNetLoaded() {
     console.log("loaded")
   }
@@ -115,14 +115,10 @@ function VideoCanvas({ height, width, mirror }: Props) {
       }
       context.drawImage(video.current, 0, 0, width, height);
       if (pose.current && skeleton.current) {
-        context.fillStyle = 'red';
-        context.strokeStyle = 'red';
-        for (let i = 0; i < pose.current.keypoints.length; i++) {
-          let x = pose.current.keypoints[i].position.x
-          let y = pose.current.keypoints[i].position.y
-          context.strokeRect(x - 32, y - 32, 64, 64);
-        }
-        // context.stroke();
+        context.fillStyle = skeletonColor;
+        context.strokeStyle = skeletonColor;
+        context.lineWidth = 5;
+        context.lineCap = 'round'
         context.beginPath();
         for (let i = 0; i < skeleton.current.length; i++) {
           let a = skeleton.current[i][0];
