@@ -28,6 +28,26 @@ type Angles = {
     left: number
   },
 }
+type poseCoordinates = {
+  x: number,
+  y: number,
+  confidence: number
+}
+
+type PoseNetPose = {
+  pose: {
+    keypoints: object[],
+    rightWrist: poseCoordinates,
+    rightElbow: poseCoordinates,
+    rightShoulder: poseCoordinates,
+    rightHip: poseCoordinates,
+    leftHip: poseCoordinates,
+    leftShoulder: poseCoordinates,
+    leftElbow: poseCoordinates,
+    leftWrist: poseCoordinates
+  },
+  skeleton: object
+}
 
 let navigatorIsReady = false;
 let mirrored = false;
@@ -58,10 +78,11 @@ function VideoCanvas({ height, width, mirror }: Props) {
     console.log("loaded")
   }
 
-  function handlePose(poses: [object, object]) {
-    if (poses.length) {
-      pose.current = poses[0].pose;
-      skeleton.current = poses[0].skeleton;
+  function handlePose([poses]: [PoseNetPose]) {
+    if (poses) {
+      console.log("hey", poses)
+      pose.current = poses.pose;
+      skeleton.current = poses.skeleton;
       handleAngles(pose.current)
     }
   }
@@ -86,7 +107,7 @@ function VideoCanvas({ height, width, mirror }: Props) {
     }
   }
 
-  function handleAngles(pose) {
+  function handleAngles(pose: PoseNetPose["pose"]) {
     const { rightWrist, rightElbow, rightShoulder, rightHip, leftHip, leftShoulder, leftElbow, leftWrist } = pose;
     let elbow = { right: 0, left: 0 };
     let armpit = { right: 0, left: 0 };
@@ -96,7 +117,7 @@ function VideoCanvas({ height, width, mirror }: Props) {
     armpit.left = 180 - calculateMidAngle([leftElbow.x, leftElbow.y], [leftShoulder.x, leftShoulder.y], [leftHip.x, leftHip.y]);
     poseAngles.elbow = elbow;
     poseAngles.armpit = armpit;
-    // console.table({ armpit, elbow })
+    console.log(elbow)
     if (status.current !== 'up' && poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
       status.current = 'up';
     }
@@ -142,7 +163,7 @@ function VideoCanvas({ height, width, mirror }: Props) {
 
   return (
     <div>
-      <video ref={video} height={height} width={width} autoPlay></video>
+      <video ref={video} height={height} width={width} autoPlay hidden></video>
       <canvas ref={canvas} height={height} width={width}></canvas>
       <button onClick={setMirror}>mirror</button>
       <Counter count={count} />

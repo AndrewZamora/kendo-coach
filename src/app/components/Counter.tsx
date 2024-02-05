@@ -1,15 +1,5 @@
 import React from 'react'
 
-type Angles = {
-  armpit?: {
-    right: number,
-    left: number
-  },
-  elbow?: {
-    right: number,
-    left: number
-  },
-}
 type Props = {
   count: number
 }
