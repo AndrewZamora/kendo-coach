@@ -1,4 +1,4 @@
-# Kendo Coach
+# Kendo Trainer
 
 ## Getting Started
 
