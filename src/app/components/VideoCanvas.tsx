@@ -80,7 +80,6 @@ function VideoCanvas({ height, width, mirror }: Props) {
 
   function handlePose([poses]: [PoseNetPose]) {
     if (poses) {
-      console.log("hey", poses)
       pose.current = poses.pose;
       skeleton.current = poses.skeleton;
       handleAngles(pose.current)
@@ -117,7 +116,6 @@ function VideoCanvas({ height, width, mirror }: Props) {
     armpit.left = 180 - calculateMidAngle([leftElbow.x, leftElbow.y], [leftShoulder.x, leftShoulder.y], [leftHip.x, leftHip.y]);
     poseAngles.elbow = elbow;
     poseAngles.armpit = armpit;
-    console.log(elbow)
     if (status.current !== 'up' && poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
       status.current = 'up';
     }
