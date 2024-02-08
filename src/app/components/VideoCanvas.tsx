@@ -72,7 +72,6 @@ function VideoCanvas({ height, width, mirror }: Props) {
   let pose = useRef<null | any>(null);
   let status = useRef<null | string>(null);
   let skeleton = useRef<null | any>(null);
-  let mediaStream: MediaStream | null = null;
   let skeletonColor = '#16FF00'
   function poseNetLoaded() {
     console.log("loaded")
@@ -87,10 +86,10 @@ function VideoCanvas({ height, width, mirror }: Props) {
   }
 
   function handleMediaStream(stream: MediaStream) {
-    mediaStream = stream
     if (video && video.current) {
       if (video.current && "srcObject" in video.current) {
-        video.current.srcObject = mediaStream;
+        video.current.srcObject = stream;
+        video.current.play()
       }
       _poseNet = poseNet(video.current, poseNetLoaded);
       if (_poseNet) {
@@ -160,12 +159,12 @@ function VideoCanvas({ height, width, mirror }: Props) {
   }
 
   return (
-    <div>
-      <video ref={video} height={height} width={width} autoPlay hidden></video>
+    <>
+      <video ref={video} height={height} width={width} hidden></video>
       <canvas ref={canvas} height={height} width={width}></canvas>
       <button onClick={setMirror}>mirror</button>
       <Counter count={count} />
-    </div>
+    </>
 
   )
 }
