@@ -60,10 +60,10 @@ export default function SuburiCounter() {
     const { rightWrist, rightElbow, rightShoulder, rightHip, leftHip, leftShoulder, leftElbow, leftWrist } = pose;
     let elbow = { right: 0, left: 0 };
     let armpit = { right: 0, left: 0 };
-    elbow.right = 180 - calculateMidAngle([rightShoulder.x, rightShoulder.y], [rightElbow.x, rightElbow.y], [rightWrist.x, rightWrist.y]);
-    elbow.left = 180 - calculateMidAngle([leftShoulder.x, leftShoulder.y], [leftElbow.x, leftElbow.y], [leftWrist.x, leftWrist.y]);
-    armpit.right = 180 - calculateMidAngle([rightElbow.x, rightElbow.y], [rightShoulder.x, rightShoulder.y], [rightHip.x, rightHip.y]);
-    armpit.left = 180 - calculateMidAngle([leftElbow.x, leftElbow.y], [leftShoulder.x, leftShoulder.y], [leftHip.x, leftHip.y]);
+    elbow.right =  calculateMidAngle([rightShoulder.x, rightShoulder.y], [rightElbow.x, rightElbow.y], [rightWrist.x, rightWrist.y]);
+    elbow.left = calculateMidAngle([leftShoulder.x, leftShoulder.y], [leftElbow.x, leftElbow.y], [leftWrist.x, leftWrist.y]);
+    armpit.right = calculateMidAngle([rightElbow.x, rightElbow.y], [rightShoulder.x, rightShoulder.y], [rightHip.x, rightHip.y]);
+    armpit.left =  calculateMidAngle([leftElbow.x, leftElbow.y], [leftShoulder.x, leftShoulder.y], [leftHip.x, leftHip.y]);
     poseAngles.elbow = elbow;
     poseAngles.armpit = armpit;
     if (status.current !== 'up' && poseAngles.armpit.right > 110 && poseAngles.armpit.left > 110) {
