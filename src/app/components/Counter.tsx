@@ -3,10 +3,11 @@ import React from 'react'
 type Props = {
   count: number
 }
+
 function Counter({ count }: Props) {
   return (
     <>
-      <div>{count}</div>
+      <div>Count: {count}</div>
     </>
   )
 }
