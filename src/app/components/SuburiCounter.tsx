@@ -2,7 +2,7 @@
 import VideoCanvas from "./VideoCanvas";
 import Counter from "./Counter";
 import { useState, useRef, RefObject } from 'react';
-import calculateMidAngle from '../utilities/utilities';
+import { calculateMidAngle } from '../utilities/utilities';
 import { PoseNetPose } from "../types/poseNet";
 
 let mirrored = false;

@@ -8,4 +8,4 @@ function calculateMidAngle(first: coordinates, mid: coordinates, end: coordinate
   return Math.abs(angle)
 }
 
-export default calculateMidAngle;
+export { calculateMidAngle };
