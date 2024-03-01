@@ -7,7 +7,7 @@ type Props = {
 function Counter({ count }: Props) {
   return (
     <>
-      <div>Count: {count}</div>
+      <div className='text-9xl'>Count: {count}</div>
     </>
   )
 }

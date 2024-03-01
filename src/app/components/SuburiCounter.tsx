@@ -82,13 +82,17 @@ export default function SuburiCounter() {
 
   return (
     <>
+
       <VideoCanvas
         height={height}
         width={width}
         mirror={true}
         onPose={handlePose}
         onDraw={handleDraw} />
-      <Counter count={count} />
+      <div className=" flex flex-1 items-center justify-center">
+
+        <Counter count={count} />
+      </div>
     </>
   )
 }

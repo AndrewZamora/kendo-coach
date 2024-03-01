@@ -4,8 +4,8 @@ const SuburiCounter= dynamic(() => import('@/app/components/SuburiCounter'), { s
 export default function Home() {
   return (
     <>
-      <h1>Kendo Trainer</h1>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <h1 className='pl-24 pt-5 pb-5 text-4xl'>Kendo Suburi Counter</h1>
+      <main className="flex min-h-screen  justify-between pl-24 pr-25 pb-24">
         <SuburiCounter/>
       </main>
     </>

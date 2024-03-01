@@ -58,7 +58,7 @@ function VideoCanvas({ height, width, mirror, onPose, onDraw }: Props) {
   return (
     <>
       <video ref={video} height={height} width={width} hidden></video>
-      <canvas ref={canvas} height={height} width={width}></canvas>
+      <canvas className='flex-1 object-cover rounded-3xl' ref={canvas} height={height} width={width}></canvas>
     </>
 
   )
