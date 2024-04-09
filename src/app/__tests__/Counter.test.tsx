@@ -1,7 +1,9 @@
 
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, cleanup } from '@testing-library/react'
 import Counter from '../components/Counter'
+
+afterEach(cleanup)
 
 describe('Counter', () => {
   it('should have the word "Count"', () => {
