@@ -1,5 +1,5 @@
 'use client'
-import React, { RefObject, useRef } from 'react';
+import React, { RefObject, useRef, useState } from 'react';
 import useCanvas from './useCanvas';
 import { PoseNetPose, PoseNet } from "../types/poseNet";
 // https://github.com/ml5js/ml5-library/issues/570
@@ -20,13 +20,17 @@ let navigatorIsReady = false;
 function VideoCanvas({ height, width, mirror, onPose, onDraw }: Props) {
   let video = useRef<HTMLVideoElement>(null);
   const canvas = useCanvas({ draw });
+  let [permissions, setPermissions] = useState(false)
   let constraints = { video: true };
   let _poseNet: null | any = null;
 
   if (typeof window !== 'undefined') {
     if (!navigatorIsReady) {
       navigatorIsReady = true
-      navigator.mediaDevices.getUserMedia(constraints).then((mediaStream: MediaStream) => handleMediaStream(mediaStream));
+      navigator.mediaDevices.getUserMedia(constraints).then((mediaStream: MediaStream) => {
+        setPermissions(true);
+        handleMediaStream(mediaStream);
+      });
     }
   }
 
@@ -57,8 +61,9 @@ function VideoCanvas({ height, width, mirror, onPose, onDraw }: Props) {
 
   return (
     <>
+      <div className={permissions ? 'hidden' : 'flex-1 object-cover rounded-3xl  flex items-center justify-center border-solid border-black border-2'}>Please allow permissions</div>
       <video ref={video} height={height} width={width} hidden></video>
-      <canvas className='flex-1 object-cover rounded-3xl' ref={canvas} height={height} width={width}></canvas>
+      <canvas className={`flex-1 object-cover rounded-3xl ` + (permissions ? '' : 'invisible absolute')} ref={canvas} height={height} width={width}></canvas>
     </>
 
   )
